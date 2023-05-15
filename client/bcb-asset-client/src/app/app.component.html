@@ -1,0 +1,69 @@
+<div class="card">
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New Asset"
+        icon="pi pi-plus"
+        class="p-button-success mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+  <p-table
+        #dt
+        [value]="assets"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'symbol', 'price', 'volume']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name" style="min-width:15rem">Name <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="symbol" style="min-width:15rem">Symbol <p-sortIcon field="symbol"></p-sortIcon></th>
+                <th pSortableColumn="price" style="min-width:15rem">Price <p-sortIcon field="price"></p-sortIcon></th>
+                <th pSortableColumn="volume" style="min-width:15rem">Volume <p-sortIcon field="volume"></p-sortIcon></th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-asset>
+            <tr>
+                <td>{{ asset.name }}</td>
+                <td>{{ asset.symbol }}</td>
+                <td>{{ asset.price }}</td>
+                <td>{{ asset.volume }}</td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">In total there are {{ assets ? assets.length : 0 }} assets.</div>
+        </ng-template>
+    </p-table>
+</div>
+
+
+<p-dialog [(visible)]="assetDialog" [style]="{ width: '450px' }" header="Asset Details" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+      <div class="field">
+          <label for="name">Name</label>
+          <input type="text" pInputText id="name" [(ngModel)]="asset.name" required autofocus />
+          <small class="p-error"  *ngIf="submitted && !asset.name">Name is required.</small>
+      </div>
+      <div class="field">
+        <label for="name">Symbol </label>
+        <input type="text" pInputText id="symbol " [(ngModel)]="asset.symbol" required autofocus />
+        <small class="p-error" *ngIf="submitted && !asset.symbol">Name is required.</small>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAsset()"></button>
+  </ng-template>
+</p-dialog>
